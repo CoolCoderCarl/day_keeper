@@ -41,9 +41,9 @@ DATA = RequestToAPI("/NextPublicHolidays/ES")
 
 # DATA = RequestToAPI("/NextPublicHolidays/ES")
 
-TELEGRAM_BOT_TOKEN = "1802734430:AAHESIJUGFg8d6P_OpF-w1BO_vgl0n0FzzI" #ENV["TELEGRAM_BOT_TOKEN"]
+TELEGRAM_BOT_TOKEN = ENV["TELEGRAM_BOT_TOKEN"]
 TELEGRAM_API_URL = "https://api.telegram.org/bot#{TELEGRAM_BOT_TOKEN}/sendMessage"
-TELEGRAM_CHAT_ID = "411906804" #ENV["TELEGRAM_CHAT_ID"]
+TELEGRAM_CHAT_ID = ENV["TELEGRAM_CHAT_ID"]
 
 def report_to_telegram
     logger.info("Send to telegram...")
