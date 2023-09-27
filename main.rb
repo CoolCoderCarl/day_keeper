@@ -1,19 +1,60 @@
-require 'logger'
-require 'os'
+require 'uri'
+require 'json'
+require 'net/http'
+require 'telegram/bot' # https://github.com/atipugin/telegram-bot-ruby
 
-$var = OS.cpu_count
+# url = URI("https://date.nager.at/api/v3/PublicHolidays/2023/ES")
 
-def log_ging
-    logger = Logger.new(STDOUT)
-    logger.level = Logger::INFO
+# https://date.nager.at/swagger/index.html
 
-    logger.info("Program started")
-    
-    while true
-        logger.info("CPU count: #{$var}")
-        sleep(1)
+URL = "https://date.nager.at/api/v3"
+
+YEAR = Time.now.year
+
+def RequestToAPI(endpoint)
+
+    url = URI("#{URL}#{endpoint}")
+
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Get.new(url)
+    request["accept"] = 'application/json'
+
+    response = http.request(request)
+    return JSON.parse(response.read_body)
+end
+
+# puts RequestToAPI("/CountryInfo/ES")
+
+# parsed_json = JSON.parse(RequestToAPI("/CountryInfo/ES"))
+
+# puts parsed_json["commonName"]
+# puts RequestToAPI("/LongWeekend/#{YEAR}/ES")
+
+DATA = RequestToAPI("/PublicHolidays/#{YEAR}/ES")
+# puts RequestToAPI("/IsTodayPublicHoliday/ES")
+# puts RequestToAPI("/NextPublicHolidays/ES")
+# puts RequestToAPI("/NextPublicHolidaysWorldwide")
+
+# DATA = RequestToAPI("/NextPublicHolidays/ES")
+
+TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+TELEGRAM_API_URL = "https://api.telegram.org/bot#{TELEGRAM_BOT_TOKEN}/sendMessage"
+TELEGRAM_CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
+
+def report_to_telegram
+    Telegram::Bot::Client.run(TELEGRAM_BOT_TOKEN) do |bot|
+        for data in DATA do
+            bot.api.send_message(chat_id: TELEGRAM_CHAT_ID, 
+            text: "Date: #{data["date"]} 
+            \n Local Name: #{data["localName"]}
+            \n Fixed: #{data["fixed"]}
+            \n Global: #{data["global"]}
+            \n Types: #{data["types"][0..]}"
+            )
+        end
     end
 end
 
-# Start of the program
-log_ging
+report_to_telegram
