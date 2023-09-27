@@ -39,9 +39,9 @@ DATA = RequestToAPI("/PublicHolidays/#{YEAR}/ES")
 
 # DATA = RequestToAPI("/NextPublicHolidays/ES")
 
-TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+TELEGRAM_BOT_TOKEN = ENV["TELEGRAM_BOT_TOKEN"]
 TELEGRAM_API_URL = "https://api.telegram.org/bot#{TELEGRAM_BOT_TOKEN}/sendMessage"
-TELEGRAM_CHAT_ID = os.environ["TELEGRAM_CHAT_ID"]
+TELEGRAM_CHAT_ID = ENV["TELEGRAM_CHAT_ID"]
 
 def report_to_telegram
     Telegram::Bot::Client.run(TELEGRAM_BOT_TOKEN) do |bot|

@@ -1,3 +1,3 @@
 source 'http://rubygems.org'
 
-gem 'telegram/bot'
+gem 'telegram/bot', '~> 1.0.0'
