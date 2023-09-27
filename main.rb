@@ -6,17 +6,15 @@ require 'telegram/bot' # https://github.com/atipugin/telegram-bot-ruby
 
 logger = Logger.new(STDOUT)
 logger.level = Logger::INFO
+logger.info("Starting...")
 
 # url = URI("https://date.nager.at/api/v3/PublicHolidays/2023/ES")
 
 # https://date.nager.at/swagger/index.html
-
+logger.info("Set variables...")
 URL = "https://date.nager.at/api/v3"
-
 YEAR = Time.now.year
 time_to_send = "08:00" #Time.new.strftime("%H:%M")
-
-logger.info("Starting...")
 
 def RequestToAPI(endpoint)
 
