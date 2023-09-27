@@ -4,7 +4,7 @@ require 'logger'
 require 'net/http'
 require 'telegram/bot' # https://github.com/atipugin/telegram-bot-ruby
 
-logger = Logger.new(STDOUT)
+logger = Logger.new('/proc/1/fd/1')
 logger.level = Logger::INFO
 logger.info("Starting...")
 
