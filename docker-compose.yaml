@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  day_keeper:
+    container_name: day_keeper
+    image: h0d0user/day_keeper:latest
+    restart: always
+    environment:
+      - TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN
+      - TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID
+    networks:
+      - day_keeper_net
+    # volumes:
+    #   - "./cities.txt:/opt/cities.txt"
+
+networks:
+  day_keeper_net:
+
+# volumes:
+#   weather_observer_volume:
