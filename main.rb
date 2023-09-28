@@ -46,7 +46,7 @@ TELEGRAM_API_URL = "https://api.telegram.org/bot#{TELEGRAM_BOT_TOKEN}/sendMessag
 TELEGRAM_CHAT_ID = ENV["TELEGRAM_CHAT_ID"]
 
 def report_to_telegram
-    logger.info("Send to telegram...")
+    # logger.info("Send to telegram...") #  main.rb:49:in `report_to_telegram': undefined local variable or method `logger' for main:Object (NameError)
     sleep(1)
     Telegram::Bot::Client.run(TELEGRAM_BOT_TOKEN) do |bot|
         for data in DATA do
@@ -67,7 +67,7 @@ while true
         begin
             report_to_telegram
         rescue
-            logger.err("Err while sending to telegramm")
+            logger.error("Err while sending to telegramm")
         end
     end
 end
