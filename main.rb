@@ -15,6 +15,7 @@ logger.info("Set variables...")
 URL = "https://date.nager.at/api/v3"
 YEAR = Time.now.year
 time_to_send = "08:00" #Time.new.strftime("%H:%M")
+day_to_send = "01" # Time.now.day
 
 def RequestToAPI(endpoint)
 
@@ -63,11 +64,12 @@ end
 
 # Main 
 while true
-    if time_to_send == Time.new.strftime("%H:%M")
+    if time_to_send == Time.new.strftime("%H:%M") and day_to_send == Time.now.day
         begin
             report_to_telegram
         rescue
             logger.error("Err while sending to telegramm")
         end
+    sleep(70)
     end
 end
