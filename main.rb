@@ -6,13 +6,13 @@ require 'logger'
 require 'net/http'
 require 'telegram/bot' # https://github.com/atipugin/telegram-bot-ruby
 
-# logger = Logger.new('/proc/1/fd/1')
-# logger.level = Logger::INFO
-# logger.info('Starting...')
+logger = Logger.new('/proc/1/fd/1')
+logger.level = Logger::INFO
+logger.info('Starting...')
 
 # url = URI("https://date.nager.at/api/v3/PublicHolidays/2023/ES")
 
-# logger.info('Set variables...')
+logger.info('Set variables...')
 URL = 'https://date.nager.at/api/v3'
 
 FIRST_D = 1

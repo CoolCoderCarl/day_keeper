@@ -17,8 +17,8 @@ jobs:
       - name: Run script
         run: gem install rubocop
 
-      - name: Black check
-        run: rubocop
+      - name: Rubocop check
+        run: rubocop -l
 
       - name: Notify if failure
         if: ${{ failure() }}
