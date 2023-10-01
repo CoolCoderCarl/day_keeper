@@ -30,6 +30,7 @@ jobs:
         uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: develop
+          github_token: ${{ secrets.REPOS_TOKEN }}          
 
       - uses: actions-ecosystem/action-add-assignees@v1
         with:
