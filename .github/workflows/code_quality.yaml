@@ -3,6 +3,10 @@ name: Code Quality
 on:
   push:
     branches: [ feature/* ]
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+      - 'changelog.json'
 
 jobs:
   code_quality:
