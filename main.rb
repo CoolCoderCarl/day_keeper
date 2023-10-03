@@ -29,7 +29,16 @@ def RequestToAPI(endpoint)
   request['accept'] = 'application/json'
 
   response = http.request(request)
-  JSON.parse(response.read_body)
+  case response
+  when Net::HTTPNoContent
+    'No Content'
+  when Net::HTTPUnauthorized
+    'Unauthorized'
+  when Net::HTTPServerError
+    'HTTPServerError'
+  else
+    JSON.parse(response.read_body)
+  end
 end
 
 # puts RequestToAPI("/CountryInfo/ES")
@@ -73,14 +82,14 @@ loop do
   case Time.new.strftime('%H:%M')
   # Send when new year
   when '08:00'
-    if Time.now.day == FIRST_D and Time.now.month == FIRST_M
-        report_to_telegram("/PublicHolidays/#{year}/ES")
-        sleep(70)
+    if (Time.now.day == FIRST_D) && (Time.now.month == FIRST_M)
+      report_to_telegram("/PublicHolidays/#{year}/ES")
+      sleep(70)
     end
   when '09:00'
-    if Time.now.day == FIRST_D # TODO remove sending all other monthes only the current one # puts RequestToAPI('/NextPublicHolidays/ES')[0]["date"].split("-")[1]
-        report_to_telegram('/NextPublicHolidays/ES')
-        sleep(70)
+    if Time.now.day == FIRST_D # TODO: remove sending all other monthes only the current one # puts RequestToAPI('/NextPublicHolidays/ES')[0]["date"].split("-")[1]
+      report_to_telegram('/NextPublicHolidays/ES')
+      sleep(70)
     end
   when '10:00'
     report_to_telegram('/IsTodayPublicHoliday/ES')
