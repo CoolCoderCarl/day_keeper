@@ -29,6 +29,7 @@ jobs:
         uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: release
+          github_token: ${{ secrets.REPOS_TOKEN }}
 
       - name: Add author as assignees
         uses: actions-ecosystem/action-add-assignees@v1
