@@ -31,13 +31,13 @@ def RequestToAPI(endpoint)
   response = http.request(request)
   case response
   when Net::HTTPNoContent
-    'No Content'
+    return 'No Content'
   when Net::HTTPUnauthorized
-    'Unauthorized'
+    return 'Unauthorized'
   when Net::HTTPServerError
-    'HTTPServerError'
+    return 'HTTPServerError'
   else
-    JSON.parse(response.read_body)
+    return JSON.parse(response.read_body)
   end
 end
 
@@ -62,7 +62,7 @@ def report_to_telegram(endpoint)
   sleep(1)
   begin
     Telegram::Bot::Client.run(TELEGRAM_BOT_TOKEN) do |bot|
-      result.each do |data|
+      for data in result
         bot.api.send_message(chat_id: TELEGRAM_CHAT_ID,
                              text: "Date: #{data['date']}
                 \n Local Name: #{data['localName']}
@@ -72,7 +72,8 @@ def report_to_telegram(endpoint)
       end
     end
   rescue StandardError
-    logger.error('Err while sending to telegramm')
+    # logger.error('Err while sending to telegramm')
+    puts 'Err while sending to telegramm'
   end
 end
 
