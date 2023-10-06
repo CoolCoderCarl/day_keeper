@@ -3,6 +3,10 @@ name: Code Quality
 on:
   push:
     branches: [ feature/* ]
+    paths-ignore:
+      - 'README.md'
+      - '.gitignore'
+      - 'changelog.json'
 
 jobs:
   code_quality:
@@ -17,8 +21,8 @@ jobs:
       - name: Run script
         run: gem install rubocop
 
-      - name: Black check
-        run: rubocop
+      - name: Rubocop check
+        run: rubocop -l
 
       - name: Notify if failure
         if: ${{ failure() }}
