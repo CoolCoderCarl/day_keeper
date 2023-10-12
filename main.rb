@@ -17,7 +17,7 @@ URL = 'https://date.nager.at/api/v3'
 
 FIRST_D = 1
 FIRST_M = 1
-send_mode = "default"
+send_mode = 'default'
 
 def RequestToAPI(endpoint, mode)
   url = URI("#{URL}#{endpoint}")
@@ -31,19 +31,16 @@ def RequestToAPI(endpoint, mode)
   response = http.request(request)
   case response
   when Net::HTTPNoContent
-    return 'No Content'
+    'No Content'
   when Net::HTTPUnauthorized
-    return 'Unauthorized'
+    'Unauthorized'
   when Net::HTTPServerError
-    return 'HTTPServerError'
+    'HTTPServerError'
   when Net::HTTPOK
-    if mode == "default"
-      return "Today is a public Holiday"
-    else
-      return JSON.parse(response.read_body)
-    end
+    return 'Today is a public Holiday' if mode == 'default'
+    JSON.parse(response.read_body)
   else
-    return JSON.parse(response.read_body)
+    JSON.parse(response.read_body)
   end
 end
 
@@ -62,49 +59,47 @@ def report_to_telegram(endpoint, mode)
   # logger.info("Send to telegram...") #  main.rb:49:in `report_to_telegram': undefined local variable or method `logger' for main:Object (NameError)
   sleep(1)
   case mode
-  when "year"
+  when 'year'
     begin
       Telegram::Bot::Client.run(TELEGRAM_BOT_TOKEN) do |bot|
         for data in result
           bot.api.send_message(chat_id: TELEGRAM_CHAT_ID,
-                              text: "Date: #{data['date']}
+                               text: "Date: #{data['date']}
                                     \n Local Name: #{data['localName']}
                                     \n Fixed: #{data['fixed']}
                                     \n Global: #{data['global']}
                                     \n Types: #{data['types'][0..]}")
         end
       end
-    rescue StandardError => err
+    rescue StandardError => e
       # logger.error('Err while sending to telegramm')
-      puts "Err while sending to telegramm - #{err.class}: #{err.message}"
+      puts "Err while sending to telegramm - #{e.class}: #{e.message}"
     end
-  when "month"
+  when 'month'
     begin
       Telegram::Bot::Client.run(TELEGRAM_BOT_TOKEN) do |bot|
         for data in result
           bot.api.send_message(chat_id: TELEGRAM_CHAT_ID,
-                              text: "Date: #{data['date']}
+                               text: "Date: #{data['date']}
                                     \n Local Name: #{data['localName']}
                                     \n Fixed: #{data['fixed']}
                                     \n Global: #{data['global']}
                                     \n Types: #{data['types'][0..]}")
         end
       end
-    rescue StandardError => err
+    rescue StandardError => e
       # logger.error('Err while sending to telegramm')
-      puts "Err while sending to telegramm - #{err.class}: #{err.message}"
+      puts "Err while sending to telegramm - #{e.class}: #{e.message}"
     end
-  when "default"
+  when 'default'
     begin
       Telegram::Bot::Client.run(TELEGRAM_BOT_TOKEN) do |bot|
-        # for data in result
-          bot.api.send_message(chat_id: TELEGRAM_CHAT_ID,
-                              text: result)
-        # end
+        bot.api.send_message(chat_id: TELEGRAM_CHAT_ID,
+                             text: result)
       end
-    rescue StandardError => err
+    rescue StandardError => e
       # logger.error('Err while sending to telegramm')
-      puts "Err while sending to telegramm - #{err.class}: #{err.message}"
+      puts "Err while sending to telegramm - #{e.class}: #{e.message}"
     end
   end
 end
@@ -115,19 +110,19 @@ loop do
   case Time.new.strftime('%H:%M')
   # Send when new year
   when '08:00'
-    send_mode = "year"
+    send_mode = 'year'
     if (Time.now.day == FIRST_D) && (Time.now.month == FIRST_M)
-      report_to_telegram("/PublicHolidays/#{year}/ES", mode=send_mode)
+      report_to_telegram("/PublicHolidays/#{year}/ES", mode = send_mode)
       sleep(70)
     end
   when '09:00'
-    send_mode = "month"
+    send_mode = 'month'
     if Time.now.day == FIRST_D # TODO: remove sending all other monthes only the current one # puts RequestToAPI('/NextPublicHolidays/ES')[0]["date"].split("-")[1]
-      report_to_telegram('/NextPublicHolidays/ES', mode=send_mode)
+      report_to_telegram('/NextPublicHolidays/ES', mode = send_mode)
       sleep(70)
     end
   when '10:00'
-    report_to_telegram('/IsTodayPublicHoliday/ES', mode=send_mode)
+    report_to_telegram('/IsTodayPublicHoliday/ES', mode = send_mode)
     sleep(70)
   end
 end
